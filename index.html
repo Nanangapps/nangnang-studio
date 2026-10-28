@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101020">
+<title>NangNang AI Video Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101020;color:#f6f4ff;font-family:Arial,sans-serif}
+main{width:min(720px,92%);margin:35px auto}
+header{text-align:center;padding:25px 0}
+.logo{font-size:42px}
+h1{font-size:29px;margin:12px 0}
+p{color:#b8b5d0;line-height:1.6}
+.card{background:#1b1b30;border:1px solid #373650;border-radius:20px;padding:20px;margin:18px 0}
+label{display:block;margin:15px 0 8px;font-weight:bold}
+textarea,select{width:100%;padding:14px;border:1px solid #494763;border-radius:12px;background:#111124;color:white;font:inherit}
+textarea{min-height:140px;resize:vertical}
+button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:12px;background:#8c70ff;color:white;font-size:16px;font-weight:bold;cursor:pointer}
+button.secondary{background:#34314e}
+.note{font-size:13px}
+footer{text-align:center;color:#9692b2;font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="logo">🎬✨</div>
+<h1>NangNang AI Video Studio</h1>
+<p>Ubah ide dan cerita menjadi petualangan animasi 3D.</p>
+</header>
+
+<section class="card">
+<h2>🎨 Buat ide video</h2>
+<label for="prompt">Ceritakan video impianmu</label>
+<textarea id="prompt" placeholder="Contoh: Embah Nanang mencari cinta sejati di sebuah desa yang indah..."></textarea>
+
+<label for="style">Gaya video</label>
+<select id="style">
+<option>Animasi kartun 3D</option>
+<option>Film animasi sinematik</option>
+<option>Animasi lucu</option>
+<option>Fantasi 3D</option>
+</select>
+
+<label for="ratio">Rasio video</label>
+<select id="ratio">
+<option value="16:9">Horizontal 16:9</option>
+<option value="9:16">Vertikal 9:16</option>
+<option value="1:1">Persegi 1:1</option>
+</select>
+
+<button onclick="preparePrompt()">✨ Siapkan prompt video</button>
+<button class="secondary" onclick="copyPrompt()">📋 Salin prompt</button>
+<button class="secondary" onclick="openGenerator()">🎥 Buka generator video AI</button>
+<p id="status" class="note">Website siap digunakan untuk menyiapkan ide video.</p>
+</section>
+
+<section class="card">
+<h2>📽️ Hasil video</h2>
+<p>Setelah video selesai dibuat melalui layanan AI, hasilnya dapat dibuka di sini jika kamu memiliki tautan video langsung.</p>
+<label for="videoUrl">Tautan video MP4 (opsional)</label>
+<input id="videoUrl" type="url" placeholder="https://..." style="width:100%;padding:13px;border-radius:10px">
+<button class="secondary" onclick="showVideo()">▶️ Tampilkan video</button>
+<video id="video" controls playsinline style="display:none;width:100%;margin-top:15px;border-radius:12px"></video>
+</section>
+
+<footer>NangNang AI Video Studio · Versi awal</footer>
+</main>
+
+<script>
+function buildPrompt(){
+const p=document.getElementById('prompt').value.trim();
+const s=document.getElementById('style').value;
+const r=document.getElementById('ratio').value;
+if(!p){document.getElementById('status').textContent='Tuliskan cerita video terlebih dahulu.';return ''}
+return p+'. Gaya visual: '+s+'. Rasio aspek '+r+'. Detail tinggi, gerakan halus, pencahayaan sinematik.';
+}
+function preparePrompt(){
+const p=buildPrompt();
+if(p)document.getElementById('status').textContent='Prompt siap! Salin prompt, lalu buka generator AI untuk membuat video.';
+}
+async function copyPrompt(){
+const p=buildPrompt();
+if(!p)return;
+try{
+await navigator.clipboard.writeText(p);
+document.getElementById('status').textContent='Prompt berhasil disalin. Buka generator AI dan tempelkan prompt.';
+}catch(e){
+document.getElementById('status').textContent=p;
+}
+}
+function openGenerator(){
+window.open('https://wan2.video/','_blank','noopener');
+}
+function showVideo(){
+const u=document.getElementById('videoUrl').value.trim();
+const v=document.getElementById('video');
+if(!u||!/^https?:\/\//i.test(u)){
+document.getElementById('status').textContent='Masukkan tautan video yang valid terlebih dahulu.';
+return;
+}
+v.src=u;v.style.display='block';v.load();
+document.getElementById('status').textContent='Tautan video dimuat. Jika gagal diputar, gunakan tautan MP4 langsung.';
+}
+</script>
+</body>
+</html>
